@@ -7,7 +7,7 @@ current_dir = os.getcwd()
 print(sys.path)
 sys.path.append(os.path.join(current_dir,'Main'))
 
-from Management_student import app, dao#, admin
+from Main import app, dao#, admin
 #from Main import login
 app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])

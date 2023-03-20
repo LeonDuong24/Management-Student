@@ -145,6 +145,7 @@ body {}
 .left-sidebar-pro {
     z-index: 9999;
     width: 240px;
+   
 }
 #sidebar {
     min-width: 200px;

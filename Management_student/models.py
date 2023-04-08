@@ -45,11 +45,11 @@ class Grade(Base):
     __tablename__ = 'grades'
     name = Column(String(100), nullable=False)
 
-class Subject_grade():
+class Subject_grade(Base):
     __tablename__ = 'subjects_grade'
-    grade_id = Column(Integer, ForeignKey('grades.id'), primary_key=True)
-    subject_id = Column(Integer, ForeignKey('subjects.id'), primary_key=True)
-    update_date= Column(DateTime,default=datetime.now() )
+    grade_id = Column(Integer, ForeignKey('grades.id'))
+    subject_id = Column(Integer, ForeignKey('subjects.id'))
+    subject = relationship('Subject', backref='subjects_grade', lazy=True)
     
 class RegulationAge(Base):
     __tablename__ = 'regulation_age'
@@ -88,30 +88,41 @@ class ClassScholasticStudent(Base):
     class_scholastic_id = Column(Integer, ForeignKey('class_scholastic.id'))
     student_id = Column(Integer, ForeignKey('students.id'))
     class_scholastic = relationship('ClassScholastic', backref='class_scholastic_student', lazy=True)
-    #student = relationship('Student', backref='class_scholastic', lazy=True)
     student = relationship('Student', backref='class_scholastic_student', lazy=True)
 # # # Định nghĩa model cho bảng 'scores'
 
 class Score(Base):
     __tablename__ = 'scores'
     class_scholastic_student= Column(Integer, ForeignKey('class_scholastic_student.id'), nullable=False)
-    #student_id = Column(Integer, ForeignKey('students.id'), nullable=False)
     subject_id = Column(Integer, ForeignKey('subjects.id'), nullable=False)
-    semester = Column(Integer)
-    type_test = Column(String(100))
+    semester = Column(Integer, nullable=False)
+    #type_test = relationship('type_test', backref='scores', lazy=True)
+    #class_scholastic_student=relationship('type_test', backref='class_scholastic_student', lazy=True)
+    type_test_id= Column(Integer, ForeignKey('type_test.id'), nullable=False)
     score = Column(Float, nullable=False)
+    
+class TpyeTest(Base):
+    __tablename__ = 'type_test'
+    type_test = Column(String(100), nullable=False)
+    min_test = Column(Integer, nullable=False)
+    max_test = Column(Integer,nullable=False)
+    coefficient=Column(Float)
+    note = Column(String(100))
     
 class Subject(Base):
     __tablename__ = 'subjects'
     subject = Column(String(100), nullable=False)
 
 class User(db.Model, UserMixin):
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    #id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), nullable=False)
     avatar = Column(String(100))
     username = Column(String(50), nullable=False)
     password = Column(String(100), nullable=False)
     user_role = Column(String(20), default='USER')
+    teacher_id=Column(Integer, ForeignKey('teachers.id'), nullable=False,primary_key=True)
+    #teacher = relationship('teachers', backref='user', lazy=True)
+    
 
     def __str__(self):
         return self.name

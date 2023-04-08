@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from urllib.parse import quote
 from flask_login import LoginManager
+import cloudinary
 
 app = Flask(__name__)
 app.secret_key = '#%^&(*$%^&(78678675$%&^&$^%*&^%&*^'
@@ -10,5 +11,8 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:%s@localhost/Manag
                                         % quote('1234')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 
+cloudinary.config(cloud_name='dnufcykyv', api_key='133469853585953', api_secret='_-lsIbO4d-_vDGdf35fN6aq69xc')
+
 db = SQLAlchemy(app)
 login = LoginManager(app)
+login.login_view = 'my_login'

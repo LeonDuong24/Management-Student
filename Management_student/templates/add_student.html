@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="product-payment-inner-st">
+    <ul id="myTabedu1" class="tab-review-design">
+        <li class="active"><a href="#description">Nhập thông tin</a></li>
+    </ul>
+    <div id="myTabContent" class="tab-content custom-product-edit">
+        <div class="product-tab-list tab-pane fade active in" id="description">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="review-content-section">
+                        <div id="dropzone1" class="pro-ad">
+                            <form method="POST" class="dropzone dropzone-custom needsclick add-professors dz-clickable" id="demo1-upload" novalidate="novalidate">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="name">Họ và tên:</label>
+                                            <input name="name" type="text" class="form-control" placeholder="Họ và tên">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="address">Địa chỉ:</label>
+                                            <input name="address" type="text" class="form-control" placeholder="Địa chỉ">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="mobile_no">Số điện thoại:</label>
+                                            <input name="mobile_no" type="tel" class="form-control" placeholder="số điện thoại">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="mobile_no">Ngày sinh:</label>
+                                            <input name="birthdate" type="date" class="form-control hasDatepicker" placeholder="Ngày sinh">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="email">Email:</label>
+                                            <input name="email" id="email" type="email" class="form-control" placeholder="Email">
+                                        </div>
+                                        <div class="form-group alert-up-pd">
+                                            <div class="dz-message needsclick download-custom">
+                                                <i class="fa fa-download edudropnone" aria-hidden="true"></i>
+                                                <h2 class="edudropnone">Nơi tải ảnh đại diện</h2>
+                                                <input type="file" class="form-control-file" id="file" name="file" >
+                                                
+                                                <input name="imageico" class="hd-pro-img" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <!-- <div class="form-group res-mg-t-15">
+                                            <label for="mobile_no">Chú thích:</label>
+                                            <input textarea name="note" placeholder="Chú thích"></textarea>
+                                        </div> -->
+                                        <div class="form-group res-mg-t-15">
+                                            <label for="note">Chú thích:</label>
+                                            <textarea name="note" placeholder="Chú thích"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <select name="grade" class="form-control">
+                                                <option value="none" selected="" disabled="">Khối lớp</option>
+                                                <option value="0">Nam</option>
+                                                <option value="1">Nữ</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <select name="class" class="form-control">
+                                                <option value="none" selected="" disabled="">Lớp học</option>
+                                                <option value="0">Nam</option>
+                                                <option value="1">Nữ</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <select name="gender" class="form-control">
+                                                <option value="none" selected="" disabled="">Chọn giới tính</option>
+                                                <option value="0">Nam</option>
+                                                <option value="1">Nữ</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <!-- <div class="form-group">
+                                            <label for="mobile_no">Chú thích:</label>
+                                            <textarea name="class_id" placeholder="Lớp học"></textarea>
+                                        </div> -->
+                                        
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="payment-adress">
+                                            <button type="submit" class="btn btn-primary waves-effect waves-light">Xác nhận</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      
+       
+    </div>
+</div>
+{% endblock %}

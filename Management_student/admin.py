@@ -1,6 +1,6 @@
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from Main import app, db
+from Management_student import app, db
 
 
 

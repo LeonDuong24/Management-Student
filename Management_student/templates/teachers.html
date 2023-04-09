@@ -4,12 +4,21 @@
     <div class="breadcome-list">
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <div class="breadcome-heading">
-                    <form role="search" class="sr-input-func">
-                        <input type="text" placeholder="Search..." class="search-int form-control">
-                        <a href="#"><i class="fa fa-search"></i></a>
-                    </form>
-                </div>
+                <form class="d-flex" action="/teachers">
+                    <div class="breadcome-heading">
+                            <input name="name_teacher" type="text" placeholder="Tìm tên giáo viên" class="search-int form-control">
+                            <a href="#"><i class="fa fa-search"></i></a>
+                    </div>
+                    <div class="breadcome-heading">
+                        <select id ="subject" name="subject" class="form-control">
+                            <option value="None">Tìm theo môn</option>
+                            {% for sj in subject%}
+                                <option value="{{sj.id}}">{{ sj.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>         
+                    <button class="btn btn-primary" type="submit">Tìm</button>
+                </form>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <ul class="breadcome-menu">
@@ -20,6 +29,7 @@
                 </ul>
             </div>
         </div>
+        
     </div>
 </div>
 <div class="contacts-area mg-b-15">
@@ -28,19 +38,19 @@
        
                 <div class="row">
                     {% for tc in teachers %}     
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                        <div class="student-inner-std res-mg-b-30">
-                            <div class="student-img">
-                                <img src="{{ tc.image }}" alt="">
-                            </div>
-                            <div class="student-dtl">
-                                <a href="/teacher_profile/{{ tc.id }}" ><h2>{{ tc.name }}</h2></a>
-                            
-                                <p class="dp">{{ tc.subject_id}}</p>
-                                <p class="dp-ag">{{ tc.gender }}</p>
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                            <div class="student-inner-std res-mg-b-30">
+                                <div class="student-img">
+                                    <img src="{{ tc.image }}" alt="">
+                                </div>
+                                <div class="student-dtl">
+                                    <a href="/teacher_profile/{{ tc.id }}" ><h2>{{ tc.name }}</h2></a>
+                                
+                                    <p class="dp">GV bộ môn: {{ tc.subject.name}}</p>
+                                    <p class="dp-ag">{{ tc.gender }}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     {% endfor %}
                 </div>
        

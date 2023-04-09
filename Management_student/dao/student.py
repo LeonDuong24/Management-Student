@@ -73,6 +73,39 @@ def get_student(request):
     popup_content="Thêm học sinh thành công"
     return  popup_content
 
+
+
+def get_score_class(class_scholastic_student):
+    semesterI={}
+    semesterII={}
+    type_test=models.TpyeTest.query.all()
+    subject_grade=models.Subject_grade.query.filter_by(grade_id=class_scholastic_student.class_scholastic.grade_id).all()
+    score_subject={}
+    for subject in subject_grade:
+        score_subject[subject.subject.name]={}
+    # for type in type_test:
+    #     semesterI[type.id]=[]
+    #     semesterII[type.id]=[]
+    scores=models.Score.query.filter_by(class_scholastic_student=class_scholastic_student.id).all()
+    for sc in scores:
+        if(sc.semester==1):
+            semesterI[sc.subject.name][sc.type_test_id].append(sc.score)
+        elif (sc.semester==2):
+            semesterII[sc.type_test_id].append(sc.score)
+    score_grade={'1':semesterI,'2':semesterII}
+    return score_grade
+
+def get_his_class(student_id):
+    try:
+        score_his={}
+        grades=models.ClassScholasticStudent.query.filter_by(student_id=student_id,activity=False).all()
+        for class_grade in grades:
+            score_class=get_score_class(class_grade)
+            score_his[class_grade.class_scholastic.name]=score_class
+        return score_his
+    except:
+        return None
+
 def get_all_student(page=1):
     page_size=5
     start = (page-1)*page_size

@@ -2,7 +2,7 @@ from datetime import datetime
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))) 
-from sqlalchemy import Column, DateTime, String, Integer, Float, ForeignKey, Text
+from sqlalchemy import Column, DateTime, String, Integer, Float, ForeignKey, Text,Boolean
 from sqlalchemy.orm import relationship
 from Management_student import db, app
 from flask_login import UserMixin
@@ -24,6 +24,7 @@ class Teacher(Base):
     phone_number = Column(String(100))
     email = Column(String(100))
     subject_id = Column(Integer, ForeignKey('subjects.id'))
+    subject = relationship('Subject', backref='teachers', lazy=True)
     image = Column(String(100))
     gender = Column(String(100))
 
@@ -55,73 +56,59 @@ class RegulationAge(Base):
     __tablename__ = 'regulation_age'
     max_age = Column(Integer,default=20)
     min_age = Column(Integer,default=15)
-    
-
-# class Class(Base):
-#     __tablename__ = 'classes'
-#     name = Column(String(100), nullable=False)
-#     #grade = relationship('grade', backref='grades', lazy=True)
-#     grade_id=Column(Integer, ForeignKey('grades.id'), nullable=False)
+    active=Column(Boolean, default=True)
     
 class ClassScholastic(Base):
     __tablename__ = 'class_scholastic'
     grade_id=Column(Integer, ForeignKey('grades.id'), nullable=False)
+    grade = relationship('Grade', backref='class_scholastic', lazy=True)
     name=Column(String(100))
-    scholastic=Column(String(100))
     regulation_age=Column(Integer, ForeignKey('regulation_age.id'))
     max_size = Column(Integer,default=40)
     
-    
-# class ClassStudentHis(Base):
-#     __tablename__ = 'class_scholastic_his'
-#     class_id = Column(Integer)
-#     student_id = Column(Integer)
-#     note = Column(String(100))
-#     scholastic=Column(String(100))
-#     max_size = Column(Integer,default=40)
-#     max_age = Column(Integer,default=20)
-#     min_age = Column(Integer,default=15)
 
 # # # Định nghĩa model cho bảng 'class_student'
 class ClassScholasticStudent(Base):
     __tablename__ = 'class_scholastic_student'
     class_scholastic_id = Column(Integer, ForeignKey('class_scholastic.id'))
+    scholastic=Column(String(100))
     student_id = Column(Integer, ForeignKey('students.id'))
     class_scholastic = relationship('ClassScholastic', backref='class_scholastic_student', lazy=True)
     student = relationship('Student', backref='class_scholastic_student', lazy=True)
+    active=Column(Boolean, default=True)
 # # # Định nghĩa model cho bảng 'scores'
 
 class Score(Base):
     __tablename__ = 'scores'
-    class_scholastic_student= Column(Integer, ForeignKey('class_scholastic_student.id'), nullable=False)
+    class_scholastic_student_id= Column(Integer, ForeignKey('class_scholastic_student.id'), nullable=False)
     subject_id = Column(Integer, ForeignKey('subjects.id'), nullable=False)
     semester = Column(Integer, nullable=False)
-    #type_test = relationship('type_test', backref='scores', lazy=True)
-    #class_scholastic_student=relationship('type_test', backref='class_scholastic_student', lazy=True)
+    subject = relationship('Subject', backref='scores', lazy=True)
+    type_test = relationship('TpyeTest', backref='scores', lazy=True)
+    class_scholastic_student=relationship('ClassScholasticStudent', backref='scores', lazy=True)
     type_test_id= Column(Integer, ForeignKey('type_test.id'), nullable=False)
     score = Column(Float, nullable=False)
     
 class TpyeTest(Base):
     __tablename__ = 'type_test'
-    type_test = Column(String(100), nullable=False)
+    name = Column(String(100), nullable=False)
     min_test = Column(Integer, nullable=False)
     max_test = Column(Integer,nullable=False)
     coefficient=Column(Float)
-    note = Column(String(100))
+    
     
 class Subject(Base):
     __tablename__ = 'subjects'
-    subject = Column(String(100), nullable=False)
-
+    name = Column(String(100), nullable=False)
+  
 class User(db.Model, UserMixin):
     #id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(100), nullable=False)
-    avatar = Column(String(100))
+    #name = Column(String(100), nullable=False)
     username = Column(String(50), nullable=False)
     password = Column(String(100), nullable=False)
     user_role = Column(String(20), default='USER')
     teacher_id=Column(Integer, ForeignKey('teachers.id'), nullable=False,primary_key=True)
-    #teacher = relationship('teachers', backref='user', lazy=True)
+    teacher = relationship('Teacher', backref='user', lazy=True)
     
 
     def __str__(self):

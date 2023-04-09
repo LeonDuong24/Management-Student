@@ -51,12 +51,17 @@ def add_teacher(request):
     popup_content="Thêm giáo viên thành công"
     return  popup_content
 
-def get_all_teacher(page=1):
+def get_all_teacher(subject_id=None,name_teacher=None,page=1):
+    query = models.Teacher.query
+    if subject_id:
+        query=models.Teacher.query.filter(models.Teacher.subject_id.__eq__(subject_id) )
+    if name_teacher:
+        query = query.filter(models.Teacher.name.contains(name_teacher))
     page_size=5
     start = (page-1)*page_size
     end=start+page_size
-    teachers=models.Teacher.query
-    return teachers.slice(start,end).all()
+    #teachers=models.Teacher.query
+    return query.slice(start,end).all()
 
 def check_age(birthdate, age_min, age_max):
     today = datetime.date.today()

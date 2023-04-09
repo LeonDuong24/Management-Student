@@ -4,13 +4,15 @@ from flask_login import login_user, logout_user,login_required
 import sys
 import os
 from datetime import datetime
+
+
 current_dir = os.getcwd()
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))) 
 #print(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 #sys.path.append(r"C:\Users\Alpaca\Desktop\Management-Student")
 
-
-from Management_student import app, dao, admin,login,student,ClassScholastic,models,subject,teacher
+from dao import teacher,user,student,ClassScholastic,subject
+from Management_student import app, admin,login,models
 
 
 @app.route('/chart', methods=['GET', 'POST'])
@@ -30,10 +32,18 @@ def students():
 
 @app.route('/teachers')
 def teachers():
+    subject_id = request.args.get('subject')
+    name_teacher = request.args.get('name_teacher')
     page=request.args.get('page',1)
+    print(subject_id)
+    print(name_teacher)
+    teachers=teacher.get_all_teacher(subject_id,name_teacher,int(page))
+    subject=models.Subject.query.all()
+    #teachers=teacher.get_all_teacher(int(page))
+    for i in teachers:
+        print(i.name)
     
-    teachers=teacher.get_all_teacher(int(page))
-    return render_template('teachers.html',teachers=teachers,pages=math.ceil(len(teachers)/5))
+    return render_template('teachers.html',teachers=teachers,pages=math.ceil(len(teachers)/5),subject=subject)
 
 @app.route('/add_grade', methods=['GET','POST'])
 def process_add_grade():
@@ -103,7 +113,7 @@ def my_login():
 def my_login_process():
     username = request.form['username']
     password = request.form['password']
-    u = dao.auth_user(username, password)
+    u = user.auth_user(username, password)
     
     if u:
         login_user(user=u)
@@ -122,7 +132,7 @@ def query_students():
     # Lấy tiêu chí truy vấn từ yêu cầu GET gửi từ máy khách
     criteria = request.args.get('criteria')
     # Thực hiện truy vấn cơ sở dữ liệu để lấy danh sách học sinh phù hợp với tiêu chí
-    students = Student.query.filter(criteria).all()
+    students = models.Student.query.filter(criteria).all()
     # Trả về danh sách học sinh dưới dạng JSON
     return jsonify([student.to_dict() for student in students])
 

@@ -196,6 +196,7 @@
                                     <p>These are the Custom bootstrap Animate flash Accordion style 2</p>
                                 </div>
                                 <div class="panel-group edu-custon-design" id="accordion2">
+                                    {%for i in score_his %}
                                     <div class="panel panel-default">
                                         <div class="panel-heading accordion-head">
                                             <h4 class="panel-title">
@@ -207,36 +208,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading accordion-head">
-                                            <h4 class="panel-title">
-                                                <a data-toggle="collapse" data-parent="#accordion2" href="#collapse5">
-                                         Collapsible Group 2</a>
-                                            </h4>
-                                        </div>
-                                        <div id="collapse5" class="panel-collapse panel-ic collapse">
-                                            <div class="panel-body admin-panel-content animated flash">
-                                                <p>It was popularised in the 1960s with the release of Letraset sheets of the containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions.</p>
-                                                <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit,sed do eiusmod tempor incididunt ut labore et dolore magna aliqua of Lorem Ipsum.</p>
-                                                <p> Ut enim adminim veniam, quis nostrud exercitation ullamco laboris nisis ut aliquip ex ea commodo consequat consectetur adipisicing elit.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading accordion-head">
-                                            <h4 class="panel-title">
-                                                <a data-toggle="collapse" data-parent="#accordion2" href="#collapse6">
-                                         Collapsible Group 2</a>
-                                            </h4>
-                                        </div>
-                                        <div id="collapse6" class="panel-collapse panel-ic collapse">
-                                            <div class="panel-body admin-panel-content animated flash">
-                                                <p>It was popularised in the 1960s with the release of Letraset sheets of the containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions.</p>
-                                                <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit,sed do eiusmod tempor incididunt ut labore et dolore magna aliqua of Lorem Ipsum.</p>
-                                                <p> Ut enim adminim veniam, quis nostrud exercitation ullamco laboris nisis ut aliquip ex ea commodo consequat consectetur adipisicing elit.</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {%endfor%}
                                 </div>
                             </div>
                         </div>

@@ -17,7 +17,7 @@ class AdminView(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated and current_user.user_role.__eq__("ADMIN")
 class GradeView(ModelView):
-    column_list = ['id', 'name']
+    form_columns = ['name', 'note']
 
 class AuthenticatedView(BaseView):
     def is_accessible(self):
@@ -25,6 +25,7 @@ class AuthenticatedView(BaseView):
     
 admin.add_view(GradeView(models.Grade, db.session))
 admin.add_view(ModelView(models.ClassScholasticStudent, db.session))
+admin.add_view(ModelView(models.ClassScholastic, db.session))
 admin.add_view(ModelView(models.Student, db.session))
 
 # admin.add_view(AdminView(Category, db.session))

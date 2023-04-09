@@ -3,6 +3,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))) 
 from Management_student import db,models
+import cloudinary.uploader
 
 def get_teacher(request):
     name = request.form['name']
@@ -18,15 +19,26 @@ def get_teacher(request):
         gender="Nam"
     elif gender==str(1):
         gender="Nữ"
-    print(gender)
-    print(name)
-    print(address)
-    print(mobile_no)
-    print(email)
-    print(birthdate)
-    print(note)
+    
 
 
+def update_teacher(request,id):
+    teacher = models.Teacher.query.get(id)
+    teacher.name = request.form['name']
+    teacher.address = request.form['address']
+    teacher.phone_number = request.form['mobile_no']
+    teacher.email = request.form['email']
+    teacher.date_of_birth = request.form['birthdate']
+    teacher.note = request.form['note']
+    img=request.files['image']
+    #teacher.class_id = request.form['class_id']
+    teacher.gender = request.form['gender']
+    if img:
+        res = cloudinary.uploader.upload(request.files['image'])
+        teacher.image=res['secure_url']
+    if teacher != False:
+        #db.session.add(class_scholastic_st)
+        db.session.commit()
 
 def add_teacher(request):
     name = request.form['name']

@@ -6,8 +6,12 @@ from sqlalchemy import Column, DateTime, String, Integer, Float, ForeignKey, Tex
 from sqlalchemy.orm import relationship
 from Management_student import db, app
 from flask_login import UserMixin
+from flask_login import current_user
 
-
+# class UserMixin(object):
+#     @declared_attr
+#     def user_update(cls):
+#         return db.Column(db.String(50), nullable=False, default=current_user.name)
 class Base(db.Model):
     __abstract__=True
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -107,7 +111,7 @@ class User(db.Model, UserMixin):
     username = Column(String(50), nullable=False)
     password = Column(String(100), nullable=False)
     user_role = Column(String(20), default='USER')
-    teacher_id=Column(Integer, ForeignKey('teachers.id'), nullable=False,primary_key=True)
+    id=Column(Integer, ForeignKey('teachers.id'), nullable=False,primary_key=True)
     teacher = relationship('Teacher', backref='user', lazy=True)
     
 

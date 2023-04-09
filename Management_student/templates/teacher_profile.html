@@ -85,10 +85,8 @@
         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
             <div class="product-payment-inner-st res-mg-t-30 analysis-progrebar-ctn">
                 <ul id="myTabedu1" class="tab-review-design">
-                    <li class="active"><a href="#description">Thông tin năm học hiện tại</a></li>
-                    <li><a href="#classes" > Quá trình học tập</a></li>
+                    <li class="active"><a href="#description">Thông tin thêm</a></li>
                     <li><a href="#INFORMATION">Cập nhật thông tin</a></li>
-                    <li><a href="#score">Cập nhật điểm học</a></li>
                 </ul>
                 <div id="myTabContent" class="tab-content custom-product-edit st-prf-pro">
                     <div class="product-tab-list tab-pane fade active in" id="description">
@@ -98,7 +96,8 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="content-profile">
-                                                <h2>Thông tin thêm</h2>
+                                                <h2>Bộ môn giảng dạy: {{ teacher_profile.subject.name}}</h2>
+                                                <h2>Chú thích</h2>
                                                 <p>{{ teacher_profile.note}}</p>
                                             </div>
                                         </div>
@@ -107,67 +106,12 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="product-tab-list tab-pane fade" id="classes">
-                        <div class="row">
-                            <div class="admin-pro-accordion-wrap shadow-inner">
-                                <div class="alert-title">
-                                    <h2>Animate flash Accordion</h2>
-                                    <p>These are the Custom bootstrap Animate flash Accordion style 2</p>
-                                </div>
-                                <div class="panel-group edu-custon-design" id="accordion2">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading accordion-head">
-                                            <h4 class="panel-title">
-                                                <a data-toggle="collapse" data-parent="#accordion2" href="#collapse4">Lớp 10</a>
-                                            </h4>
-                                        </div>
-                                        <div id="collapse4" class="panel-collapse panel-ic collapse in">
-                                            <div class="panel-body admin-panel-content animated flash">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading accordion-head">
-                                            <h4 class="panel-title">
-                                                <a data-toggle="collapse" data-parent="#accordion2" href="#collapse5">
-                                         Collapsible Group 2</a>
-                                            </h4>
-                                        </div>
-                                        <div id="collapse5" class="panel-collapse panel-ic collapse">
-                                            <div class="panel-body admin-panel-content animated flash">
-                                                <p>It was popularised in the 1960s with the release of Letraset sheets of the containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions.</p>
-                                                <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit,sed do eiusmod tempor incididunt ut labore et dolore magna aliqua of Lorem Ipsum.</p>
-                                                <p> Ut enim adminim veniam, quis nostrud exercitation ullamco laboris nisis ut aliquip ex ea commodo consequat consectetur adipisicing elit.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading accordion-head">
-                                            <h4 class="panel-title">
-                                                <a data-toggle="collapse" data-parent="#accordion2" href="#collapse6">
-                                         Collapsible Group 2</a>
-                                            </h4>
-                                        </div>
-                                        <div id="collapse6" class="panel-collapse panel-ic collapse">
-                                            <div class="panel-body admin-panel-content animated flash">
-                                                <p>It was popularised in the 1960s with the release of Letraset sheets of the containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions.</p>
-                                                <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit,sed do eiusmod tempor incididunt ut labore et dolore magna aliqua of Lorem Ipsum.</p>
-                                                <p> Ut enim adminim veniam, quis nostrud exercitation ullamco laboris nisis ut aliquip ex ea commodo consequat consectetur adipisicing elit.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="product-tab-list tab-pane fade" id="INFORMATION">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="review-content-section">
                                     <div id="dropzone1" class="pro-ad">
-                                        <form method="POST" action="/update_student/{{ teacher_profile.id }}" enctype="multipart/form-data" class="dropzone dropzone-custom needsclick add-professors dz-clickable" id="demo1-upload" novalidate="novalidate">
+                                        <form method="POST" action="/update_teacher/{{ teacher_profile.id }}" enctype="multipart/form-data" class="dropzone dropzone-custom needsclick add-professors dz-clickable" id="demo1-upload" novalidate="novalidate">
                                             <div class="row">
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                     <div class="form-group">
@@ -218,15 +162,7 @@
                                                             {% endfor %}
                                                         </select>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <select id="class" name="class" class="form-control">
-                                                            <!-- <option value="none" selected="" disabled="">Lớp học</option> -->
-                                                            {%for cl in classes%}
-                                                                <option name="{{cl.grade_id}}" value="{{cl.id}}">{{ cl.name}}</option>
-                                                            {% endfor %}
-                                                            
-                                                        </select>
-                                                    </div>
+                                                   
                                                     <div class="form-group">
                                                         <select name="gender" id="gender" class="form-control">
                                                             <option value="none"  disabled="">Chọn giới tính</option>

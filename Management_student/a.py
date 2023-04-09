@@ -4,6 +4,7 @@ from flask_login import login_user, logout_user,login_required
 import sys
 import os
 from datetime import datetime
+import cloudinary.uploader
 
 
 current_dir = os.getcwd()
@@ -93,6 +94,12 @@ def process_update_student(id):
         student.update_student(request,id)
         #return render_template('add_student.html')
         return redirect(url_for('student_profile', student_id=id))
+    
+@app.route('/update_teacher/<int:id>', methods=['POST'])
+def process_update_teacher(id):
+        teacher.update_teacher(request,id)
+        #return render_template('add_student.html')
+        return redirect(url_for('teacher_profile', id=id))
   
 
 @app.route('/add_teacher', methods=['GET','POST'])
@@ -141,7 +148,7 @@ def query_students():
 def teacher_profile(id):
     if request.method == 'GET':
         teacher_profile=models.Teacher.query.get(id)
-        dob_str = teacher_profile.date_of_birth.strftime('%Y-%m-%d')
+        dob_str = teacher_profile.date_of_birth.strftime('%d-%m-%Y') 
         return render_template('teacher_profile.html',teacher_profile=teacher_profile,dob_str=dob_str)
 
 
@@ -186,10 +193,33 @@ def student_profile(student_id):
 def my_register():
     return render_template('register.html')
 
+@app.route("/register", methods=['post'])
+def my_register_process():
+    data = request.form
+    password = data['password']
+    confirm = data['confirm']
+    
+
+    if password.__eq__(confirm):
+       
+        username = data['username']
+        #res = cloudinary.uploader.upload(request.files['avatar'])
+        teacher_id = data['teacher_id']
+        try:
+            user.add_user(teacher_id=teacher_id, username=username, password=password)
+            return redirect("/login")
+        except Exception as ex:
+            msg = str(ex)
+            print(ex)
+    else:
+        msg = 'Password does not match!!!'
+
+    return render_template('register.html', msg=msg)
+
 
 @login.user_loader
 def get_user(user_id):
-    return dao.get_user_by_id(user_id)
+    return user.get_user_by_id(user_id)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80,debug=True)

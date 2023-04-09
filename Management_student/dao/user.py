@@ -13,12 +13,13 @@ def get_user_by_id(user_id):
 
 
 def auth_user(username, password):
-    #password = str(hashlib.md5(password.encode('utf-8')).hexdigest())
+    password = str(hashlib.md5(password.encode('utf-8')).hexdigest())
     print('password',password)
     return User.query.filter(User.username.__eq__(username),
                              User.password.__eq__(password)).first()
-def add_user(name, username, password, avatar=''):
+def add_user(teacher_id, username, password):
     password = str(hashlib.md5(password.encode('utf-8')).hexdigest())
-    u = User(name=name, username=username, password=password, avatar=avatar)
+    #u = User(teacher_id=teacher_id, username=username, password=password)
+    u = User(id=teacher_id, username=username, password=password)
     db.session.add(u)
     db.session.commit()

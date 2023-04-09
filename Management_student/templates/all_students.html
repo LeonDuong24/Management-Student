@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="breadcome-list">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="breadcome-heading">
+                    <form role="search" class="sr-input-func">
+                        <input type="text" placeholder="Search..." class="search-int form-control">
+                        <a href="#"><i class="fa fa-search"></i></a>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <ul class="breadcome-menu">
+                    <li><a href="#">Home</a> <span class="bread-slash">/</span>
+                    </li>
+                    <li><span class="bread-blod">All Students</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="contacts-area mg-b-15">
+    <div class="container-fluid">
+      
+       
+                <div class="row">
+                    {% for st in students %}     
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                        <div class="student-inner-std res-mg-b-30">
+                            <div class="student-img">
+                                <img src="{{ st.image }}" alt="">
+                            </div>
+                            <div class="student-dtl">
+                                <a href="/student_profile/{{ st.id }}" ><h2>{{ st.name }}</h2></a>
+                                <p class="dp-ag">{{ st.gender }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+       
+    </div>
+</div>
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+      <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+      {% for page in range(1,pages+1)%}
+      <li class="page-item"><a class="page-link" href="{{url_for('students',page=page)}}">{{page}}</a></li>
+      {% endfor %}
+      <li class="page-item"><a class="page-link" href="#">Next</a></li>
+    </ul>
+</nav>
+{% endblock %}

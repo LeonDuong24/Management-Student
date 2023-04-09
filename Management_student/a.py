@@ -24,11 +24,18 @@ def chart():
 def index():
     return render_template('index.html')
 
-@app.route('/students')
-def students():
+@app.route('/all_students')
+def all_students():
     page=request.args.get('page',1)
     
     students=student.get_all_student(int(page))
+    return render_template('all_students.html',students=students,pages=math.ceil(len(students)/5))
+
+ 
+@app.route('/students')
+def students():
+    page=request.args.get('page',1) 
+    students=student.get_students_active(int(page))
     return render_template('students.html',students=students,pages=math.ceil(len(students)/5))
 
 @app.route('/teachers')
@@ -80,7 +87,9 @@ def process_add_student():
 @app.route('/add_student')
 @login_required
 def add_student():
-    return render_template('add_student.html')
+    grade=models.Grade.query.all()
+    classes=models.ClassScholastic.query.all()
+    return render_template('add_student.html',grade=grade,classes=classes)
 
 @app.route('/add_score/<int:id>', methods=['POST'])
 def process_add_score(id):
@@ -148,8 +157,9 @@ def query_students():
 def teacher_profile(id):
     if request.method == 'GET':
         teacher_profile=models.Teacher.query.get(id)
-        dob_str = teacher_profile.date_of_birth.strftime('%d-%m-%Y') 
-        return render_template('teacher_profile.html',teacher_profile=teacher_profile,dob_str=dob_str)
+        dob_str = teacher_profile.date_of_birth.strftime('%d-%m-%Y')
+        subject=models.Subject.query.all() 
+        return render_template('teacher_profile.html',teacher_profile=teacher_profile,dob_str=dob_str,subject=subject)
 
 
 @app.route('/student_profile/<int:student_id>', methods=['GET','POST'])

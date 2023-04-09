@@ -5,21 +5,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from Management_student import db,models
 import cloudinary.uploader
 
-def get_teacher(request):
-    name = request.form['name']
-    address = request.form['address']
-    #username = request.form['username']
-    mobile_no = request.form['mobile_no']
-    email = request.form['email']
-    birthdate = request.form['birthdate']
-    note = request.form['note']
-    subject = request.form['subject']
-    gender = request.form['gender']
-    if gender==str(0):
-        gender="Nam"
-    elif gender==str(1):
-        gender="Nữ"
-    
 
 
 def update_teacher(request,id):
@@ -31,13 +16,12 @@ def update_teacher(request,id):
     teacher.date_of_birth = request.form['birthdate']
     teacher.note = request.form['note']
     img=request.files['image']
-    #teacher.class_id = request.form['class_id']
+    teacher.subject_id = request.form['subject']
     teacher.gender = request.form['gender']
     if img:
         res = cloudinary.uploader.upload(request.files['image'])
         teacher.image=res['secure_url']
     if teacher != False:
-        #db.session.add(class_scholastic_st)
         db.session.commit()
 
 def add_teacher(request):
@@ -49,15 +33,13 @@ def add_teacher(request):
     note = request.form['note']
     gender = request.form['gender']
     subject = request.form['subject']
-    if gender==str(0):
-        gender="Nam"
-    elif gender==str(1):
-        gender="Nữ"
     #age=models.RegulationAge
     # if check_age(birthdate,15,20) == False:
     #     popup_content="Độ tuổi không phù hợp"
     #     return  popup_content
-    teacher=models.Teacher(name=name, gender=gender, note=note, email=email, date_of_birth=birthdate, phone_number=mobile_no,subject_id=subject) #, address=address
+    teacher=models.Teacher(name=name,address=address, gender=gender, 
+                           note=note, email=email, date_of_birth=birthdate, 
+                           phone_number=mobile_no,subject_id=subject) 
     db.session.add(teacher)
     db.session.commit()
     popup_content="Thêm giáo viên thành công"
@@ -65,9 +47,9 @@ def add_teacher(request):
 
 def get_all_teacher(subject_id=None,name_teacher=None,page=1):
     query = models.Teacher.query
-    if subject_id:
+    if subject_id is not None:
         query=models.Teacher.query.filter(models.Teacher.subject_id.__eq__(subject_id) )
-    if name_teacher:
+    if name_teacher is not None:
         query = query.filter(models.Teacher.name.contains(name_teacher))
     page_size=5
     start = (page-1)*page_size

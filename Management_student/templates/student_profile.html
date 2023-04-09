@@ -105,7 +105,9 @@
                 <ul id="myTabedu1" class="tab-review-design">
                     <li class="active"><a href="#description">Thông tin năm học hiện tại</a></li>
                     <li><a href="#classes" > Quá trình học tập</a></li>
+                    {%if current_user.user_role == "ADMIN" %}
                     <li><a href="#INFORMATION">Cập nhật thông tin</a></li>
+                    {%endif%}
                     <li><a href="#score">Cập nhật điểm học</a></li>
                 </ul>
                 <div id="myTabContent" class="tab-content custom-product-edit st-prf-pro">

@@ -59,9 +59,9 @@ def get_student(request):
     gender = request.form['gender']
     img=request.files['image']
     #age=models.RegulationAge
-    latest_record = models.RegulationAge.query.order_by(models.RegulationAge.update_date.desc()).first()
-    print(latest_record)
-    if check_age(birthdate,latest_record.min_age,latest_record.max_age) == False:
+    regulation_age = models.RegulationAge.query.filter(models.RegulationAge.active.__eq__(True)).first()
+    print(regulation_age)
+    if check_age(birthdate,regulation_age.min_age,regulation_age.max_age) == False:
         popup_content="Độ tuổi không phù hợp"
         return  popup_content
     if img:
@@ -106,11 +106,21 @@ def get_his_class(student_id):
     except:
         return None
 
+def get_students_active(page=1):
+    page_size=5
+    start = (page-1)*page_size
+    end=start+page_size
+    students=models.ClassScholasticStudent.query.filter(models.ClassScholasticStudent.active.__eq__(True))
+    return students.slice(start,end).all()
+    #return models.ClassScholasticStudent.slice(start,end).all()
+    #return models.Student.slice(start,end).all()
+
+
 def get_all_student(page=1):
     page_size=5
     start = (page-1)*page_size
     end=start+page_size
-    students=models.ClassScholasticStudent.query
+    students=models.Student.query
     return students.slice(start,end).all()
     #return models.ClassScholasticStudent.slice(start,end).all()
     #return models.Student.slice(start,end).all()

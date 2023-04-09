@@ -53,24 +53,27 @@
                                             <textarea name="note" placeholder="Chú thích"></textarea>
                                         </div>
                                         <div class="form-group">
-                                            <select name="grade" class="form-control">
-                                                <option value="none" selected="" disabled="">Khối lớp</option>
-                                                <option value="0">Nam</option>
-                                                <option value="1">Nữ</option>
+                                            <select id ="grade" name="grade" class="form-control">
+                                                <!-- <option value="none" selected="" disabled="">Khối lớp</option> -->
+                                                {%for gr in grade%}
+                                                    <option value="{{gr.id}}">{{ gr.name}}</option>
+                                                {% endfor %}
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <select name="class" class="form-control">
-                                                <option value="none" selected="" disabled="">Lớp học</option>
-                                                <option value="0">Nam</option>
-                                                <option value="1">Nữ</option>
+                                            <select id="class" name="class" class="form-control">
+                                                <!-- <option value="none" selected="" disabled="">Lớp học</option> -->
+                                                {%for cl in classes%}
+                                                    <option name="{{cl.grade_id}}" value="{{cl.id}}">{{ cl.name}}</option>
+                                                {% endfor %}
+                                                
                                             </select>
                                         </div>
                                         <div class="form-group">
                                             <select name="gender" class="form-control">
                                                 <option value="none" selected="" disabled="">Chọn giới tính</option>
-                                                <option value="0">Nam</option>
-                                                <option value="1">Nữ</option>
+                                                <option value="Nam">Nam</option>
+                                                <option value="Nữ">Nữ</option>
                                             </select>
                                         </div>
                                         

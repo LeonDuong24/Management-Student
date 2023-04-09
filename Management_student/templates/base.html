@@ -127,13 +127,13 @@
                             <a class="has-arrow" href="all-students.html" aria-expanded="false"><span class="educate-icon educate-student icon-wrap"></span> <span class="mini-click-non">Học sinh</span></a>
                             <ul class="submenu-angle" aria-expanded="false">
                                 <li><a title="All Students" href="{{url_for('students')}}"><span class="mini-sub-pro">Tất cả học sinh còn học</span></a></li>
-                                {% if current_user.role =='ADMIN' %}
+                                {% if current_user.user_role =='ADMIN' %}
                                 <li><a title="Add Students" href="{{url_for('process_add_student')}}"><span class="mini-sub-pro">Thêm học sinh</span></a></li>
                                 {%endif%}
-                                <li><a title="Edit Students" href="{{url_for('students')}}"><span class="mini-sub-pro">Tất cả học sinh</span></a></li>
+                                <li><a title="Edit Students" href="{{url_for('all_students')}}"><span class="mini-sub-pro">Tất cả học sinh</span></a></li>
                             </ul>
                         </li>
-                        {% if current_user.role =='ADMIN' %}
+                        {% if current_user.user_role =='ADMIN' %}
                         <li>
                             <a class="has-arrow" href="all-courses.html" aria-expanded="false"><span class="educate-icon educate-course icon-wrap"></span> <span class="mini-click-non">Môn học</span></a>
                             <ul class="submenu-angle" aria-expanded="false">
@@ -225,7 +225,7 @@
 															<i class="fa fa-angle-down edu-icon edu-down-arrow"></i>
 														</a>
                                                     <ul role="menu" class="dropdown-header-top author-log dropdown-menu animated zoomIn">
-                                                        <li><a href="#"><span class="edu-icon edu-home-admin author-log-ic"></span>Hồ sơ của tôi</a>
+                                                        <li><a href="/teacher_profile/{{ current_user.id }}"><span class="edu-icon edu-home-admin author-log-ic"></span>Hồ sơ của tôi</a>
                                                         </li>
                                                         
                                                         <li><a href="/logout"><span class="edu-icon edu-locked author-log-ic"></span>Đăng xuất</a>

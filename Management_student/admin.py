@@ -25,6 +25,7 @@ class AuthenticatedView(BaseView):
     
 admin.add_view(GradeView(models.Grade, db.session))
 admin.add_view(ModelView(models.ClassScholasticStudent, db.session))
+admin.add_view(ModelView(models.RegulationAge, db.session))
 admin.add_view(ModelView(models.ClassScholastic, db.session))
 admin.add_view(ModelView(models.Student, db.session))
 

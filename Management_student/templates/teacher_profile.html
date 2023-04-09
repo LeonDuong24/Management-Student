@@ -86,7 +86,9 @@
             <div class="product-payment-inner-st res-mg-t-30 analysis-progrebar-ctn">
                 <ul id="myTabedu1" class="tab-review-design">
                     <li class="active"><a href="#description">Thông tin thêm</a></li>
+                    {%if current_user.id ==  teacher_profile.id or current_user.user_role == "ADMIN" %}
                     <li><a href="#INFORMATION">Cập nhật thông tin</a></li>
+                    {%endif%}
                 </ul>
                 <div id="myTabContent" class="tab-content custom-product-edit st-prf-pro">
                     <div class="product-tab-list tab-pane fade active in" id="description">
@@ -155,10 +157,10 @@
                                                     </div>
                                                    
                                                     <div class="form-group">
-                                                        <select id ="grade" name="grade" class="form-control">
+                                                        <select id ="subject" name="subject" class="form-control">
                                                             <!-- <option value="none" selected="" disabled="">Khối lớp</option> -->
-                                                            {%for gr in grade%}
-                                                                <option value="{{gr.id}}">{{ gr.name}}</option>
+                                                            {%for sj in subject%}
+                                                                <option value="{{sj.id}}">{{ sj.name}}</option>
                                                             {% endfor %}
                                                         </select>
                                                     </div>

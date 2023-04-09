@@ -37,18 +37,18 @@
         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
             <div class="profile-info-inner">
                 <div class="profile-img">
-                    <img src="{{ student_profile.image}}" alt="" />
+                    <img src="{{ teacher_profile.image}}" alt="" />
                 </div>
                 <div class="profile-details-hr">
                     <div class="row">
                         <div class="col-lg-6 col-md-12 col-sm-12 col-xs-6">
                             <div class="address-hr">
-                                <p><b>Họ và tên</b><br />{{ student_profile.name}}</p>
+                                <p><b>Họ và tên</b><br />{{ teacher_profile.name}}</p>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12 col-sm-12 col-xs-6">
                             <div class="address-hr tb-sm-res-d-n dps-tb-ntn">
-                                <p><b>Giới tính</b><br /> {{ student_profile.gender}}</p>
+                                <p><b>Giới tính</b><br /> {{ teacher_profile.gender}}</p>
                             </div>
                         </div>
                     </div>
@@ -60,46 +60,28 @@
                         </div>
                         <div class="col-lg-6 col-md-12 col-sm-12 col-xs-6">
                             <div class="address-hr tb-sm-res-d-n dps-tb-ntn">
-                                <p><b>Số điện thoại</b><br /> {{ student_profile.phone_number}}</p>
+                                <p><b>Số điện thoại</b><br /> {{ teacher_profile.phone_number}}</p>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="address-hr">
-                                <p><b>Email</b><br /> {{ student_profile.email}}</p>
+                                <p><b>Email</b><br /> {{ teacher_profile.email}}</p>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="address-hr">
-                                <p><b>Địa chỉ</b><br />{{ student_profile.address}}</p>
+                                <p><b>Địa chỉ</b><br />{{ teacher_profile.address}}</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <script>
-            $(document).ready(function() {
-              $("#get-all-class").click(function() {
-                $.ajax({
-                  type: "POST",
-                  url: "/get_all_class",
-                  data: {
-                    student_id: "{{ student_profile.id }}"
-                  },
-                  success: function(data) {
-                    // Xử lý dữ liệu được trả về từ Flask
-                    // Ví dụ: 
-                    // document.getElementById("student-info").innerHTML = data;
-                  }
-                });
-                return false;
-              });
-            });
-          </script>
+       
         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
             <div class="product-payment-inner-st res-mg-t-30 analysis-progrebar-ctn">
                 <ul id="myTabedu1" class="tab-review-design">
@@ -117,69 +99,7 @@
                                         <div class="col-lg-12">
                                             <div class="content-profile">
                                                 <h2>Thông tin thêm</h2>
-                                                <p>{{ student_profile.note}}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row mg-b-15">
-                                        <div class="col-lg-12">
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <div class="skill-title">
-                                                        <h2>Điểm số:</h2>
-                                                        <hr />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="sparkline8-list">
-                                            {% for semester in score_grade%}
-                                                <div class="sparkline8-hd">
-                                                    <div class="main-sparkline8-hd">
-                                                        <h1>Học kỳ {{semester}}</h1>
-                                                    </div>
-                                                </div>
-                                                <div class="sparkline8-graph">
-                                                    <div class="static-table-list">
-                                                        <table class="table">
-                                                            <thead>
-                                                                <tr>
-                                                                        <th>Môn học</th>
-                                                                    {% for type in type_test%}
-                                                                        {% for num in range (1,type.max_test+1)%}
-                                                                        <th>{{type.type_test}} ({{num}})</th>
-                                                                        {% endfor %}
-                                                                    {% endfor %}
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            {% for sj in subject_current%}
-                                                                <tr>
-                                                                    <td> {{sj.id}}</td>
-                                                                {% for sc in score_grade[semester] %}
-
-                                                                    {% for s in score_grade[semester][sc]%}
-                                                                        <td>{{s}}</td>
-                                                                    {% endfor %}
-
-                                                                    {% set num = namespace(value=0) %}
-                                                                    {% for type in type_test%}
-                                                                        {% if type.id == sc %}
-                                                                            {% set num.value = type.max_test %}
-                                                                        {% endif%}
-                                                                    {% endfor %}
-                                                                    
-                                                                    {% for i in range (num.value- score_grade[semester][sc]|length)%}
-                                                                        <td></td>
-                                                                    {% endfor %}
-                                                                    
-                                                                {% endfor %}
-                                                                </tr>
-                                                            {% endfor %}
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            {% endfor %}
+                                                <p>{{ teacher_profile.note}}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -247,20 +167,20 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="review-content-section">
                                     <div id="dropzone1" class="pro-ad">
-                                        <form method="POST" action="/update_student/{{ student_profile.id }}" enctype="multipart/form-data" class="dropzone dropzone-custom needsclick add-professors dz-clickable" id="demo1-upload" novalidate="novalidate">
+                                        <form method="POST" action="/update_student/{{ teacher_profile.id }}" enctype="multipart/form-data" class="dropzone dropzone-custom needsclick add-professors dz-clickable" id="demo1-upload" novalidate="novalidate">
                                             <div class="row">
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                     <div class="form-group">
                                                         <label for="name">Họ và tên:</label>
-                                                        <input name="name" type="text" class="form-control" value="{{ student_profile.name}}" placeholder="Họ và tên">
+                                                        <input name="name" type="text" class="form-control" value="{{ teacher_profile.name}}" placeholder="Họ và tên">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="address">Địa chỉ:</label>
-                                                        <input name="address" type="text"  value="{{ student_profile.address}}" class="form-control" placeholder="Địa chỉ">
+                                                        <input name="address" type="text"  value="{{ teacher_profile.address}}" class="form-control" placeholder="Địa chỉ">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="mobile_no">Số điện thoại:</label>
-                                                        <input name="mobile_no" type="tel" class="form-control"  value="{{ student_profile.phone_number}}" placeholder="số điện thoại">
+                                                        <input name="mobile_no" type="tel" class="form-control"  value="{{ teacher_profile.phone_number}}" placeholder="số điện thoại">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="mobile_no">Ngày sinh:</label>
@@ -268,13 +188,13 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="email">Email:</label>
-                                                        <input name="email" id="email"  type="email" class="form-control"  value="{{ student_profile.email}}" placeholder="Email">
+                                                        <input name="email" id="email"  type="email" class="form-control"  value="{{ teacher_profile.email}}" placeholder="Email">
                                                     </div>
                                                     <div class="form-group alert-up-pd">
                                                         <div class="dz-message needsclick download-custom">
                                                             <i class="fa fa-download edudropnone" aria-hidden="true"></i>
                                                             <h2 class="edudropnone">Nơi tải ảnh đại diện</h2>
-                                                            <input type="file" class="form-control-file" id="image" name="image" value="{{ student_profile.image}}">
+                                                            <input type="file" class="form-control-file" id="image" name="image" value="{{ teacher_profile.image}}">
                                                             
                                                             <input name="imageico" class="hd-pro-img" type="text">
                                                         </div>
@@ -287,7 +207,7 @@
                                                     </div> -->
                                                     <div class="form-group res-mg-t-15">
                                                         <label for="note">Chú thích:</label>
-                                                        <textarea name="note" placeholder="Chú thích">{{ student_profile.note}}</textarea>
+                                                        <textarea name="note" placeholder="Chú thích">{{ teacher_profile.note}}</textarea>
                                                     </div>
                                                    
                                                     <div class="form-group">
@@ -315,70 +235,9 @@
                                                         </select>
                                                     </div>
                                                     <script>
-                                                        var subject = "{{ student_profile.gender}}";
+                                                        var subject = "{{ teacher_profile.gender}}";
                                                         document.getElementById("gender").value = subject;
                                                     </script>
-                                                    
-                                                    <!-- <div class="form-group">
-                                                        <label for="mobile_no">Chú thích:</label>
-                                                        <textarea name="class_id" placeholder="Lớp học"></textarea>
-                                                    </div> -->
-                                                    
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <div class="payment-adress">
-                                                        <button type="submit" class="btn btn-primary waves-effect waves-light">Xác nhận</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="product-tab-list tab-pane fade" id="score">
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="review-content-section">
-                                    <div id="dropzone1" class="pro-ad">
-                                        <form method="POST" action="/add_score/{{ student_profile.id }}" class="dropzone dropzone-custom needsclick add-professors dz-clickable" id="demo1-upload" novalidate="novalidate">
-                                            <div class="row">
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <div class="form-group">
-                                                        <label for="score">Điểm</label>
-                                                        <input name="score" type="text" class="form-control"  placeholder="Nhập theo dạng 0,000">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="semester_score">Học kỳ</label>
-                                                        <select id ="semester_score" name="semester_score" class="form-control">                                   
-                                                                <option value="1">Học kỳ I</option>
-                                                                <option value="2">Học kỳ II</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <div class="form-group">
-                                                        <label for="subject_score">Môn học</label>
-                                                        <select id ="subject_score" name="subject_score" class="form-control">
-                                                            <!-- <option value="none" selected="" disabled="">Khối lớp</option> -->
-                                                            {% for sj in subject_current%}
-                                                                <option value="{{sj.id}}">{{ sj.subject.subject}}</option>
-                                                            {% endfor %}
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="type_score">Loại kiểm tra</label>
-                                                        <select id ="type_score" name="type_score" class="form-control">
-                                                            <!-- <option value="none" selected="" disabled="">Khối lớp</option> -->
-                                                            {% for ty in type_test%}
-                                                                <option value="{{ty.id}}">{{ ty.type_test}}</option>
-                                                            {% endfor %}
-                                                        </select>
-                                                    </div>                                                 
                                                 </div>
                                             </div>
                                             <div class="row">

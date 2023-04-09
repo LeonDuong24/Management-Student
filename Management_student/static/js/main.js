@@ -147,5 +147,24 @@
     }
     
     
+	$(document).ready(function() {
+		$('#get_score').click(function() {
+			$.ajax({
+				type: 'GET',
+				url: '/process_data',
+				data: {
+					'data': 'some_data'
+				},
+				success: function(response) {
+					$('#result').html(response);
+				},
+				error: function(xhr, status, error) {
+					console.log('Error:', error);
+				}
+			});
+		});
+	});	
 
 })(jQuery);
+
+

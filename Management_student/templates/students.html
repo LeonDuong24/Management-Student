@@ -3,29 +3,43 @@
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <div class="breadcome-list">
         <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <div class="breadcome-heading">
-                    <form role="search" class="sr-input-func">
-                        <input type="text" placeholder="Search..." class="search-int form-control">
-                        <a href="#"><i class="fa fa-search"></i></a>
-                    </form>
+            <form class="d-flex" action="/students">
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                        <div class="breadcome-heading">
+                           <input name="name_student" type="text" placeholder="Tìm tên học sinh" class="search-int form-control">    
+                        </div>
                 </div>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                        <div class="breadcome-heading">
+                            <!-- <input name="subject" type="text" placeholder="Tìm tên giáo viên" class="search-int form-control"> -->
+                            <select id ="class_st" name="class_st" class="form-control">
+                                <option value="">Tìm theo lớp</option>
+                                {% for cl in classes%}
+                                    <option value="{{cl.id}}">{{ cl.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>         
+                </div>
+           
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                    <button class="btn btn-primary" type="submit">Tìm</button>
+                </div>
+            </form>
+           
+            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                 <ul class="breadcome-menu">
-                    <li><a href="#">Home</a> <span class="bread-slash">/</span>
+                    <li><a href="#">Trang chủ</a> <span class="bread-slash">/</span>
                     </li>
-                    <li><span class="bread-blod">All Students</span>
+                    <li><span class="bread-blod">Tất cả học sinh</span>
                     </li>
                 </ul>
             </div>
         </div>
+        
     </div>
 </div>
 <div class="contacts-area mg-b-15">
     <div class="container-fluid">
-      
-       
                 <div class="row">
                     {% for st in students %}     
                     <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">

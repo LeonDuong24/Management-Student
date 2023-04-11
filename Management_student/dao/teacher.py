@@ -47,9 +47,11 @@ def add_teacher(request):
 
 def get_all_teacher(subject_id=None,name_teacher=None,page=1):
     query = models.Teacher.query
-    if subject_id is not None:
+    if subject_id:
+        print('subject_id',subject_id)
         query=models.Teacher.query.filter(models.Teacher.subject_id.__eq__(subject_id) )
-    if name_teacher is not None:
+    if name_teacher:
+        print('name_teacher',name_teacher)
         query = query.filter(models.Teacher.name.contains(name_teacher))
     page_size=5
     start = (page-1)*page_size

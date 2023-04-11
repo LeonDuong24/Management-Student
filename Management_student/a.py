@@ -34,9 +34,12 @@ def all_students():
  
 @app.route('/students')
 def students():
+    class_student = request.args.get('class_st')
+    name_student = request.args.get('name_student')
     page=request.args.get('page',1) 
-    students=student.get_students_active(int(page))
-    return render_template('students.html',students=students,pages=math.ceil(len(students)/5))
+    students=student.get_students_active(int(page),class_student,name_student)
+    classes=models.ClassScholastic.query.all()
+    return render_template('students.html',students=students,pages=math.ceil(len(students)/5),classes=classes)
 
 @app.route('/teachers')
 def teachers():
@@ -96,7 +99,7 @@ def process_add_score(id):
     pop=ClassScholastic.add_score(request,id)
         #student.update_student(request,id)
         #return render_template('add_student.html')
-    return redirect(url_for('student_profile', student_id=id))
+    return redirect(url_for('student_profile',popup_content=pop, student_id=id))
 
 @app.route('/update_student/<int:id>', methods=['POST'])
 def process_update_student(id):
@@ -138,19 +141,16 @@ def my_login_process():
 
     return render_template('login.html')
 
+@app.route("/end_scholastic")
+def end_scholastic():
+    popup=ClassScholastic.end_class_scholastic()
+    return render_template('index.html',popup_content=popup)
+
 @app.route("/logout")
 def my_logout():
     logout_user()
     return redirect("/login")
 
-@app.route('/query_students')
-def query_students():
-    # Lấy tiêu chí truy vấn từ yêu cầu GET gửi từ máy khách
-    criteria = request.args.get('criteria')
-    # Thực hiện truy vấn cơ sở dữ liệu để lấy danh sách học sinh phù hợp với tiêu chí
-    students = models.Student.query.filter(criteria).all()
-    # Trả về danh sách học sinh dưới dạng JSON
-    return jsonify([student.to_dict() for student in students])
 
 
 @app.route('/teacher_profile/<int:id>', methods=['GET','POST'])
@@ -167,7 +167,7 @@ def student_profile(student_id):
     if request.method == 'GET':
         grade=models.Grade.query.all()
         classes=models.ClassScholastic.query.all()
-        class_current=models.ClassScholasticStudent.query.filter_by(student_id=student_id).first()
+        class_current=models.ClassScholasticStudent.query.filter_by(student_id=student_id,active=True).first()
         type_test=models.TpyeTest.query.all()
         #subject=models.Subject_grade.query.get()
         student_profile=student.get_student_by_id(student_id)
@@ -180,20 +180,23 @@ def student_profile(student_id):
             semesterII[type.id]=[]
         if class_current:
             subject_current=models.Subject_grade.query.filter_by(grade_id=class_current.class_scholastic.grade_id).all()
-            score=models.Score.query.filter_by(class_scholastic_student=class_current.id).all()
-            for sc in score:
-                #print(sc.class_scholastic_student.class_scholastic.grade_id)
-                if(sc.semester==1):
-                    semesterI[sc.type_test_id].append(sc.score)
-                elif (sc.semester==2):
-                    semesterII[sc.type_test_id].append(sc.score)
-            score_grade={'1':semesterI,'2':semesterII}
-            print(score_grade)
-    
+            sc=student.get_score_class(class_current)
+            print(sc)
+            # score=models.Score.query.filter_by(class_scholastic_student=class_current.id).all()
+            # for sc in score:
+            #     #print(sc.class_scholastic_student.class_scholastic.grade_id)
+            #     if(sc.semester==1):
+            #         semesterI[sc.type_test_id].append(sc.score)
+            #     elif (sc.semester==2):
+            #         semesterII[sc.type_test_id].append(sc.score)
+            # score_grade={'1':semesterI,'2':semesterII}
+            # print(score_grade)
+            score=[]
+            score_grade=[]
             #score=models.Score.query.all()
             return render_template('student_profile.html',student_profile=student_profile,
                                    dob_str=dob_str, grade=grade, classes=classes, 
-                                   subject_current=subject_current, score=score, type_test=type_test,semesterI=semesterI,score_grade=score_grade)
+                                   subject_current=subject_current, score=score, type_test=type_test,semesterI=sc,score_grade=sc,class_current=class_current)
         return render_template('student_profile.html',student_profile=student_profile,dob_str=dob_str,grade=grade,classes=classes, type_test=type_test)
 
 

@@ -8,12 +8,7 @@
                 <div class="breadcome-list single-page-breadcome">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <div class="breadcome-heading">
-                                <form role="search" class="sr-input-func">
-                                    <input type="text" placeholder="Search..." class="search-int form-control">
-                                    <a href="#"><i class="fa fa-search"></i></a>
-                                </form>
-                            </div>
+                            
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <ul class="breadcome-menu">
@@ -118,6 +113,9 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="content-profile">
+                                                {%if class_current.class_scholastic.name%}
+                                                <h2>Học sinh lớp {{ class_current.class_scholastic.name}} </h2>
+                                                {%endif%}
                                                 <h2>Thông tin thêm</h2>
                                                 <p>{{ student_profile.note}}</p>
                                             </div>
@@ -148,7 +146,7 @@
                                                                         <th>Môn học</th>
                                                                     {% for type in type_test%}
                                                                         {% for num in range (1,type.max_test+1)%}
-                                                                        <th>{{type.type_test}} ({{num}})</th>
+                                                                        <th>{{type.name}} ({{num}})</th>
                                                                         {% endfor %}
                                                                     {% endfor %}
                                                                 </tr>
@@ -156,21 +154,21 @@
                                                             <tbody>
                                                             {% for sj in subject_current%}
                                                                 <tr>
-                                                                    <td> {{sj.id}}</td>
-                                                                {% for sc in score_grade[semester] %}
+                                                                    <td> {{sj.subject.name}}</td>
+                                                                {% for test in score_grade[semester][sj.id] %}
 
-                                                                    {% for s in score_grade[semester][sc]%}
+                                                                    {% for s in score_grade[semester][sj.id][test]%}
                                                                         <td>{{s}}</td>
                                                                     {% endfor %}
-
+                                                                   
                                                                     {% set num = namespace(value=0) %}
                                                                     {% for type in type_test%}
-                                                                        {% if type.id == sc %}
+                                                                        {% if type.id == test %}
                                                                             {% set num.value = type.max_test %}
                                                                         {% endif%}
                                                                     {% endfor %}
                                                                     
-                                                                    {% for i in range (num.value- score_grade[semester][sc]|length)%}
+                                                                    {% for i in range (num.value- score_grade[semester][sj.id][test]|length)%}
                                                                         <td></td>
                                                                     {% endfor %}
                                                                     
@@ -266,7 +264,7 @@
                                                    
                                                     <div class="form-group">
                                                         <select id ="grade" name="grade" class="form-control">
-                                                            <!-- <option value="none" selected="" disabled="">Khối lớp</option> -->
+                                                            <option value="" selected="" >Khối lớp</option>
                                                             {%for gr in grade%}
                                                                 <option value="{{gr.id}}">{{ gr.name}}</option>
                                                             {% endfor %}
@@ -274,7 +272,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <select id="class" name="class" class="form-control">
-                                                            <!-- <option value="none" selected="" disabled="">Lớp học</option> -->
+                                                            <option value="" selected="" >Lớp học</option>
                                                             {%for cl in classes%}
                                                                 <option name="{{cl.grade_id}}" value="{{cl.id}}">{{ cl.name}}</option>
                                                             {% endfor %}
@@ -324,7 +322,7 @@
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                     <div class="form-group">
                                                         <label for="score">Điểm</label>
-                                                        <input name="score" type="text" class="form-control"  placeholder="Nhập theo dạng 0,000">
+                                                        <input name="score" type="text" class="form-control"  placeholder="Nhập theo dạng 0.000">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="semester_score">Học kỳ</label>
@@ -340,7 +338,7 @@
                                                         <select id ="subject_score" name="subject_score" class="form-control">
                                                             <!-- <option value="none" selected="" disabled="">Khối lớp</option> -->
                                                             {% for sj in subject_current%}
-                                                                <option value="{{sj.id}}">{{ sj.subject.subject}}</option>
+                                                                <option value="{{sj.id}}">{{ sj.subject.name}}</option>
                                                             {% endfor %}
                                                         </select>
                                                     </div>
@@ -349,7 +347,7 @@
                                                         <select id ="type_score" name="type_score" class="form-control">
                                                             <!-- <option value="none" selected="" disabled="">Khối lớp</option> -->
                                                             {% for ty in type_test%}
-                                                                <option value="{{ty.id}}">{{ ty.type_test}}</option>
+                                                                <option value="{{ty.id}}">{{ ty.name}}</option>
                                                             {% endfor %}
                                                         </select>
                                                     </div>                                                 
@@ -374,4 +372,25 @@
     </div>
 </div>
 </div>
+
+<div id="popup" class="popup">
+    <!-- Pop-up content với dữ liệu được truyền từ Flask view function -->
+    <div class="popup-content">
+        <span class="close" onclick="closePopup()">&times;</span>
+        <p>{{ popup_content }}</p>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script>  function closePopup() {
+        document.getElementById("popup").style.display = "none";
+      }
+      window.onload = function() {
+			var popup_content = "{{ popup_content }}";
+			if (popup_content) {
+				document.getElementById("popup").style.display = "block";
+			}
+		}
+</script>
+
 {% endblock %}

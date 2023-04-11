@@ -3,8 +3,9 @@ from flask_sqlalchemy import SQLAlchemy
 from urllib.parse import quote
 from flask_login import LoginManager
 import cloudinary
-
+from flask_babel import Babel
 app = Flask(__name__)
+babel = Babel(app)
 app.secret_key = '#%^&(*$%^&(78678675$%&^&$^%*&^%&*^'
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:%s@localhost/ManagementStudent?charset=utf8mb4"\

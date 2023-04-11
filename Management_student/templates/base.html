@@ -93,6 +93,8 @@
 	</style>
 </head>
 <body>
+      
+    
     <!-- Start Left menu area -->
     <div class="left-sidebar-pro"   >
         <nav id="sidebar" class="">
@@ -151,9 +153,9 @@
                             </ul>
                         </li>
                         <li>
-                            <a class="has-arrow" href="all-courses.html" aria-expanded="false"><span class="educate-icon educate-library icon-wrap"></span> <span class="mini-click-non">Library</span></a>
+                            <a class="has-arrow" href="all-courses.html" aria-expanded="false"><span class="educate-icon educate-library icon-wrap"></span> <span class="mini-click-non">Quản trị</span></a>
                             <ul class="submenu-angle" aria-expanded="false">
-                                <li><a title="Login" href="login.html"><span class="mini-sub-pro">Login</span></a></li>
+                                <li><a title="Login" href="/admin"><span class="mini-sub-pro">Thay đổi thông tin</span></a></li>
                             </ul>
                         </li>
                         <li id="removable">
@@ -220,10 +222,10 @@
                                                 {% if current_user.is_authenticated %}
                                                 <li class="nav-item">
                                                     <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
-															<img src="{{ current_user.teacher.image }}" />
-															<span class="admin-name">{{ current_user.teacher.img }} {{ current_user.teacher.name }}</span>
-															<i class="fa fa-angle-down edu-icon edu-down-arrow"></i>
-														</a>
+                                                      <img src="{{ current_user.teacher.image }}" />
+                                                      <span class="admin-name">{{ current_user.teacher.img }} {{ current_user.teacher.name }}</span>
+                                                      <i class="fa fa-angle-down edu-icon edu-down-arrow"></i>
+                                                    </a>
                                                     <ul role="menu" class="dropdown-header-top author-log dropdown-menu animated zoomIn">
                                                         <li><a href="/teacher_profile/{{ current_user.id }}"><span class="edu-icon edu-home-admin author-log-ic"></span>Hồ sơ của tôi</a>
                                                         </li>
@@ -300,6 +302,7 @@
             {% block content %}
             
             {% endblock %}
+          </div>
         <!-- Content end -->
         <div class="footer-copyright-area" style="background-image: linear-gradient(to right, rgb(125, 11, 239), violet);">
             <div class="container-fluid">
@@ -367,17 +370,6 @@
     <!-- tawk chat JS
 		============================================ -->
     <script src="/static/js/tawk-chat.js"></script>
-    <script>  function closePopup() {
-        document.getElementById("popup").style.display = "none";
-      }
-    </script>
-    <script>
-		window.onload = function() {
-			var popup_content = "{{ popup_content }}";
-			if (popup_content) {
-				document.getElementById("popup").style.display = "block";
-			}
-		}
-       
-	</script>
+    
+
 </body>

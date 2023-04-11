@@ -1,9 +1,11 @@
+import copy
 import datetime
+import json
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))) 
 from Management_student import db,models
-from sqlalchemy import desc
+from sqlalchemy import desc, and_
 import cloudinary.uploader
 
 def get_student_from_UI(request):
@@ -24,76 +26,104 @@ def get_student_from_UI(request):
     return student
 
 def update_student(request,student_id):
-    print(request.form['class'])
-    #class_scholastic_st=models.ClassScholasticStudent(student_id=student_id,class_scholastic_id= request.form['class'])
+    class_current=models.ClassScholasticStudent.query.filter_by(active=True,student_id=student_id).first()
     student = models.Student.query.get(student_id)
     student.name = request.form['name']
     student.address = request.form['address']
-    #username = request.form['username']
     student.phone_number = request.form['mobile_no']
     student.email = request.form['email']
     student.date_of_birth = request.form['birthdate']
     student.note = request.form['note']
     img=request.files['image']
-    #student.class_id = request.form['class_id']
+    change_class=request.form['class']
     student.gender = request.form['gender']
     if img:
         res = cloudinary.uploader.upload(request.files['image'])
         student.image=res['secure_url']
-    #student.image = request.form['image']
+    if change_class:
+        if class_current:
+            class_current.class_scholastic_id=change_class
+        else:
+            class_scholastic_st=models.ClassScholasticStudent(student_id=student_id,class_scholastic_id= change_class)
+            if check_size_class(change_class) :
+                db.session.add(class_scholastic_st)
+            else:
+                return "Sỉ số lớp đã tới hạn" 
     if student != False:
-        #db.session.add(class_scholastic_st)
         db.session.commit()
 
-    
+def check_size_class(class_id):
+    size_class_cur= len(models.ClassScholasticStudent.query.filter_by(active=True,class_scholastic_id=class_id).all())
+    class_cur=models.ClassScholastic.query.get(class_id)
+    if (size_class_cur>class_cur.max_size):
+        return False
+    else:
+        return True
 
 def get_student(request):
-    name = request.form['name']
-    address = request.form['address']
-    #username = request.form['username']
-    mobile_no = request.form['mobile_no']
-    email = request.form['email']
-    birthdate = request.form['birthdate']
-    note = request.form['note']
-    #class_id = request.form['class_id']
-    gender = request.form['gender']
-    img=request.files['image']
-    #age=models.RegulationAge
-    regulation_age = models.RegulationAge.query.filter(models.RegulationAge.active.__eq__(True)).first()
-    print(regulation_age)
-    if check_age(birthdate,regulation_age.min_age,regulation_age.max_age) == False:
-        popup_content="Độ tuổi không phù hợp"
-        return  popup_content
-    if img:
-        res = cloudinary.uploader.upload(request.files['image'])
-        student=models.Student(name=name, gender=gender, note=note, email=email, date_of_birth=birthdate, phone_number=mobile_no,image=res['secure_url'])
-    student=models.Student(name=name, gender=gender, note=note, email=email, date_of_birth=birthdate, phone_number=mobile_no)
-    db.session.add(student)
-    db.session.commit()
-    popup_content="Thêm học sinh thành công"
-    return  popup_content
+    try:
+        name = request.form['name']
+        address = request.form['address']
+        mobile_no = request.form['mobile_no']
+        email = request.form['email']
+        birthdate = request.form['birthdate']
+        note = request.form['note']
+        class_id = request.form['class']
+        gender = request.form['gender']
+        img=request.files['image']
+        regulation_age = models.RegulationAge.query.filter(models.RegulationAge.active.__eq__(True)).first()
+        if check_age(birthdate,regulation_age.min_age,regulation_age.max_age) == False:
+            return  "Độ tuổi học sinh không phù hợp"
+        if img:
+            res = cloudinary.uploader.upload(request.files['image'])
+            student=models.Student(address=address,name=name, gender=gender, note=note, email=email, date_of_birth=birthdate, phone_number=mobile_no,image=res['secure_url']) 
+        student=models.Student(address=address,name=name, gender=gender, note=note, email=email, date_of_birth=birthdate, phone_number=mobile_no)
+        db.session.add(student)
+        db.session.commit()
+        print(student.id)
+        print(class_id)
+        if class_id:
+            class_scholastic_st=models.ClassScholasticStudent(student_id=student.id,class_scholastic_id=class_id)
+            if check_size_class(class_id) :
+                db.session.add(class_scholastic_st)
+                db.session.commit()
+            else:
+                return "Sỉ số lớp đã tới hạn"
+        return "Thêm học sinh thành công"
+    except Exception as e:
+        print(e)
+        return  "Thêm thất bại vì lý do ngoại lệ"
 
 
 
 def get_score_class(class_scholastic_student):
-    semesterI={}
-    semesterII={}
+    #{1:{"Toán":{{ 15p:[1,2,3]    }}}}
+    semester={}
     type_test=models.TpyeTest.query.all()
     subject_grade=models.Subject_grade.query.filter_by(grade_id=class_scholastic_student.class_scholastic.grade_id).all()
     score_subject={}
+    type={}
+    for ty in type_test:
+            type[ty.id]=[]
     for subject in subject_grade:
-        score_subject[subject.subject.name]={}
-    # for type in type_test:
-    #     semesterI[type.id]=[]
-    #     semesterII[type.id]=[]
-    scores=models.Score.query.filter_by(class_scholastic_student=class_scholastic_student.id).all()
-    for sc in scores:
-        if(sc.semester==1):
-            semesterI[sc.subject.name][sc.type_test_id].append(sc.score)
-        elif (sc.semester==2):
-            semesterII[sc.type_test_id].append(sc.score)
-    score_grade={'1':semesterI,'2':semesterII}
-    return score_grade
+        score_subject[subject.subject.id]=copy.deepcopy(type)
+    semester[1]=copy.deepcopy(score_subject)
+    semester[2]=copy.deepcopy(score_subject)
+    print(semester)
+    #semesterII=score_subject.copy()
+    scores2 = models.Score.query.filter_by(class_scholastic_student_id=class_scholastic_student.id).order_by(and_(models.Score.update_date,models.Score.type_test_id)).all()
+    for sc in scores2:
+        semester[sc.semester][sc.subject_id][sc.type_test_id].append(sc.score)
+    # for sem in semester.values():
+    #     for subject in sem.values():
+    #         total=0
+    #         coff=0
+    #         for test_type in subject.values():
+    #             type_score = sum(test_type)/len(subject.values())
+    #             total+=type_score
+    #             coff+=
+    #         test_type.append(total_score)
+    return semester
 
 def get_his_class(student_id):
     try:
@@ -106,14 +136,18 @@ def get_his_class(student_id):
     except:
         return None
 
-def get_students_active(page=1):
+def get_students_active(page=1,class_student=None,name_student=None):
+    query = models.ClassScholasticStudent.query.filter(models.ClassScholasticStudent.active.__eq__(True))
+    if class_student:
+        query=models.ClassScholasticStudent.query.filter(models.ClassScholasticStudent.class_scholastic_id.__eq__(class_student),models.ClassScholasticStudent.active.__eq__(True) )
+    if name_student:
+        query = query.join(models.ClassScholasticStudent.student).filter(models.Student.name.contains(name_student),models.ClassScholasticStudent.active.__eq__(True))
     page_size=5
     start = (page-1)*page_size
     end=start+page_size
-    students=models.ClassScholasticStudent.query.filter(models.ClassScholasticStudent.active.__eq__(True))
-    return students.slice(start,end).all()
-    #return models.ClassScholasticStudent.slice(start,end).all()
-    #return models.Student.slice(start,end).all()
+    #students=models.ClassScholasticStudent.query.filter(models.ClassScholasticStudent.active.__eq__(True))
+    return query.slice(start,end).all()
+
 
 
 def get_all_student(page=1):

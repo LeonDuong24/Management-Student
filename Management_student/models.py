@@ -52,8 +52,8 @@ class Grade(Base):
 
 class Subject_grade(Base):
     __tablename__ = 'subjects_grade'
-    grade_id = Column(Integer, ForeignKey('grades.id'))
-    subject_id = Column(Integer, ForeignKey('subjects.id'))
+    grade_id = Column(Integer, ForeignKey('grades.id'), nullable=False)
+    subject_id = Column(Integer, ForeignKey('subjects.id'), nullable=False)
     subject = relationship('Subject', backref='subjects_grade', lazy=True)
     
 class RegulationAge(Base):
@@ -74,9 +74,9 @@ class ClassScholastic(Base):
 # # # Định nghĩa model cho bảng 'class_student'
 class ClassScholasticStudent(Base):
     __tablename__ = 'class_scholastic_student'
-    class_scholastic_id = Column(Integer, ForeignKey('class_scholastic.id'))
+    class_scholastic_id = Column(Integer, ForeignKey('class_scholastic.id'), nullable=False)
     scholastic=Column(String(100))
-    student_id = Column(Integer, ForeignKey('students.id'))
+    student_id = Column(Integer, ForeignKey('students.id'), nullable=False)
     class_scholastic = relationship('ClassScholastic', backref='class_scholastic_student', lazy=True)
     student = relationship('Student', backref='class_scholastic_student', lazy=True)
     active=Column(Boolean, default=True)

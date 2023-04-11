@@ -10,7 +10,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="review-content-section">
                         <div id="dropzone1" class="pro-ad">
-                            <form method="POST" enctype="multipart/form-data" class="dropzone dropzone-custom needsclick add-professors dz-clickable" id="demo1-upload" novalidate="novalidate">
+                            <form method="POST" enctype="multipart/form-data" action="/add_student" class="dropzone dropzone-custom needsclick add-professors dz-clickable" id="demo1-upload" novalidate="novalidate">
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                         <div class="form-group">
@@ -54,7 +54,7 @@
                                         </div>
                                         <div class="form-group">
                                             <select id ="grade" name="grade" class="form-control">
-                                                <!-- <option value="none" selected="" disabled="">Khối lớp</option> -->
+                                                <option value="" selected="" >Khối lớp</option>
                                                 {%for gr in grade%}
                                                     <option value="{{gr.id}}">{{ gr.name}}</option>
                                                 {% endfor %}
@@ -62,7 +62,7 @@
                                         </div>
                                         <div class="form-group">
                                             <select id="class" name="class" class="form-control">
-                                                <!-- <option value="none" selected="" disabled="">Lớp học</option> -->
+                                                <option value="" selected="" >Lớp học</option>
                                                 {%for cl in classes%}
                                                     <option name="{{cl.grade_id}}" value="{{cl.id}}">{{ cl.name}}</option>
                                                 {% endfor %}
